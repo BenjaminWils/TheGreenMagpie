@@ -11,10 +11,16 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="a3ndroid.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
+        <uses-permission android:name="android.permission.NFC" />
+        <uses-feature android:name="android.hardware.nfc" android:required="true" />
     </application>
 
 </manifest>
