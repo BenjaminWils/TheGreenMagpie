@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TheGreenMagpie</string>
+    <string name="title_activity_balance_management">BalanceManagement</string>
 </resources>

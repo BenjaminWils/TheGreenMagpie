@@ -9,12 +9,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+        </activity>
+        <activity
+            android:name=".buyer.BalanceManagementActivity"
+            android:label="@string/title_activity_balance_management">
             <intent-filter>
                 <action android:name="a3ndroid.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            </intent-filter></activity>
     </application>
 
 </manifest>
