@@ -36,6 +36,7 @@
         </activity>
         <activity
             android:name=".buyer.BalanceManagementActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_balance_management">
             <intent-filter>
                 <action android:name="a3ndroid.intent.action.MAIN" />
