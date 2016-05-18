@@ -90,6 +90,7 @@ public class BalanceManagementActivity extends AppCompatActivity{
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //If the result is from paypal
+        Log.d("request code", String.valueOf(requestCode));
         if (requestCode == PaypalInfo.BALANCE_MANAGEMENT_PAYPAL_REQUEST_CODE) {
 
             //If the result is OK i.e. user has not canceled the payment
