@@ -8,7 +8,7 @@
     android:paddingRight="0dp"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.ig2i.thegreenmagpie.buyer.BuyerConnectionActivity"
-    android:background="#ffe499">
+    android:background="@color/whole_interface_background">
 
 <LinearLayout
     android:orientation="vertical"
@@ -66,7 +66,9 @@
                 android:maxLength="150"
                 android:maxLines="1"
                 android:inputType="textEmailAddress"
-                android:background="@drawable/edit_text_bg" />
+                android:background="@drawable/edit_text_bg"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp" />
         </LinearLayout>
 
         <LinearLayout

@@ -2,9 +2,12 @@
     <string name="app_name">TheGreenMagpie</string>
     <string name="title_activity_balance_management">BalanceManagement</string>
     <string name="title_activity_buyer_connection">BuyerConnection</string>
+    <string name="title_activity_seller_connection">SellerConnection</string>
     <string name="paypal_email">Paypal email address</string>
+    <string name="seller_pwd">Seller password</string>
     <string name="buyer_auto_connect">Autoconnect with this email next time</string>
     <string name="seller_button">Seller</string>
+    <string name="buyer_button">Client</string>
     <string name="explanation">NFC is enabled on the device</string>
     <string name="nfcReadOnlyErrorTitle">Read Only Error</string>
     <string name="nfcReadOnlyError">The NFC tag is not writable</string>

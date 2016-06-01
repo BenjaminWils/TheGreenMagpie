@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="dark_green">#396338</color>
     <color name="light_green">#5a9158</color>
+    <color name="whole_interface_background">#ffe499</color>
 </resources>
