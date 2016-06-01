@@ -33,12 +33,26 @@
         </activity>
         <activity android:name=".NfcDetectionActivity">
             <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-                <data android:mimeType="application/com.ig2i.thegreenmagpie"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <data android:mimeType="application/com.ig2i.thegreenmagpie" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".NfcSenderActivity"></activity>
+        <activity android:name=".NfcSenderActivity" />
+        <activity
+            android:name=".buyer.BuyerConnectionActivity"
+            android:label="@string/title_activity_buyer_connection"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:screenOrientation="portrait">
+
+            <intent-filter>
+                <action android:name="a3ndroid.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
