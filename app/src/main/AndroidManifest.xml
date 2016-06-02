@@ -3,6 +3,7 @@
     package="com.ig2i.thegreenmagpie">
 
     <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
     <application
@@ -36,7 +37,8 @@
         </activity>
         <activity
             android:name=".buyer.BalanceManagementActivity"
-            android:label="@string/title_activity_balance_management">
+            android:label="@string/title_activity_balance_management"
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="a3ndroid.intent.action.MAIN" />
 
