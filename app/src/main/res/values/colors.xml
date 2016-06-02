@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#ff4081</color>
+    <color name="darkest_green">#394c30</color>
     <color name="dark_green">#396338</color>
     <color name="light_green">#5a9158</color>
     <color name="whole_interface_background">#ffe499</color>
