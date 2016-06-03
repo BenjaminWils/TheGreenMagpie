@@ -3,6 +3,8 @@
     package="com.ig2i.thegreenmagpie">
 
     <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
     <uses-feature
         android:name="android.hardware.nfc"
@@ -104,5 +106,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
