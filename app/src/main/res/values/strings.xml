@@ -5,9 +5,13 @@
     <string name="title_activity_seller_connection">SellerConnection</string>
     <string name="paypal_email">Paypal email address</string>
     <string name="seller_pwd">Seller password</string>
-    <string name="buyer_auto_connect">Autoconnect with this email next time</string>
     <string name="seller_button">Seller</string>
+    <string name="seller_homepage_transaction_button">Make a transaction</string>
+    <string name="seller_homepage_history_button">History</string>
+    <string name="seller_transaction_initiation_amount">Type the amount</string>
+    <string name="seller_transaction_initiation_nfc">Your NFC is activated</string>
     <string name="buyer_button">Client</string>
+    <string name="buyer_auto_connect">Autoconnect with this email next time</string>
     <string name="buyer_manage_balance_button">Manage balance</string>
     <string name="buyer_homepage_nfc_message">Switch on NFC and get your phone near the seller\'s phone to pay.</string>
     <string name="buyer_nfc_transaction_detection">A payment request has been detected!</string>
@@ -20,4 +24,6 @@
     <string name="go_button">GO!</string>
     <string name="magpie_logo_description">The magpie logo of this application</string>
     <string name="logout_text">Logout</string>
+    <string name="settings_text">Settings</string>
+    <string name="return_text">Return</string>
 </resources>

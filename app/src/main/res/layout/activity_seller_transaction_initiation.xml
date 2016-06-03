@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_small_top_margin"
-    tools:context="com.ig2i.thegreenmagpie.seller.SellerHomepageActivity"
+    tools:context="com.ig2i.thegreenmagpie.seller.SellerTransactionInitiationActivity"
     android:background="@color/whole_interface_background">
 
     <LinearLayout
@@ -61,7 +61,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/logout_text"
+                    android:text="@string/return_text"
                     android:id="@+id/textView7"
                     android:textColor="@color/dark_green"
                     android:textSize="@dimen/normal_sized_text"
@@ -76,15 +76,6 @@
                 android:orientation="vertical"
                 android:gravity="center_vertical|end">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_text"
-                    android:id="@+id/textView12"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:textColor="@color/dark_green"
-                    android:textSize="@dimen/normal_sized_text" />
             </LinearLayout>
 
             <LinearLayout
@@ -94,87 +85,136 @@
                 android:orientation="vertical"
                 android:gravity="center_vertical">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageView"
-                    android:src="@drawable/settings_icon_bg"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp" />
             </LinearLayout>
         </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="12"
-            android:contentDescription="@string/magpie_logo_description"
-            android:id="@+id/magpie_view"
-            android:src="@drawable/magpie_layer"
-            android:layout_gravity="center_horizontal|top" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="6"
+            android:layout_weight="19"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2">
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/seller_transaction_initiation_amount"
+                    android:id="@+id/textView13"
+                    android:textSize="@dimen/super_sized_text"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:id="@+id/editText3"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_txt_bg_w_borders"
+                    android:text="0.80"
+                    android:textSize="@dimen/super_sized_text"
+                    android:textAlignment="center"
+                    android:numeric="decimal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5">
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="end|right">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView2"
+                        android:src="@drawable/v_icon_bg"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="12dp"
+                        android:cropToPadding="false"
+                        android:adjustViewBounds="true" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_vertical|start">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/seller_transaction_initiation_nfc"
+                        android:id="@+id/textView14"
+                        android:textColor="@color/light_green"
+                        android:textSize="@dimen/normal_sized_text"
+                        android:paddingStart="10dp"
+                        android:paddingLeft="10dp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:gravity="center_horizontal">
+
                 <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:text="@string/seller_homepage_transaction_button"
-                    android:id="@+id/button11"
-                    android:background="@drawable/edit_text_bg"
+                    android:layout_width="@dimen/go_button_width"
+                    android:layout_height="match_parent"
+                    android:text="@string/go_button"
+                    android:id="@+id/button13"
+                    android:background="@drawable/edit_txt_bg_w_borders"
                     android:textSize="@dimen/normal_sized_text" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.5"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:layout_weight="1">
 
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <Button
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:text="@string/seller_homepage_history_button"
-                    android:id="@+id/button12"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/edit_text_bg"
-                    android:textSize="@dimen/normal_sized_text" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
 
         </LinearLayout>
     </LinearLayout>
+
 </RelativeLayout>
