@@ -10,6 +10,7 @@
     <string name="seller_homepage_history_button">History</string>
     <string name="seller_transaction_initiation_amount">Type the amount</string>
     <string name="seller_transaction_initiation_nfc">Your NFC is activated</string>
+    <string name="seller_waiting_transaction_text">Awaiting for NFC connection</string>
     <string name="buyer_button">Client</string>
     <string name="buyer_auto_connect">Autoconnect with this email next time</string>
     <string name="buyer_manage_balance_button">Manage balance</string>
@@ -18,6 +19,7 @@
     <string name="buyer_transaction_acceptation">Accept</string>
     <string name="buyer_transaction_refusal">Refuse</string>
     <string name="buyer_balance_amount">Amount:</string>
+    <string name="history_right_title">Payments History</string>
     <string name="explanation">NFC is enabled on the device</string>
     <string name="nfcReadOnlyErrorTitle">Read Only Error</string>
     <string name="nfcReadOnlyError">The NFC tag is not writable</string>
@@ -26,4 +28,5 @@
     <string name="logout_text">Logout</string>
     <string name="settings_text">Settings</string>
     <string name="return_text">Return</string>
+    <string name="cancel_text">Cancel</string>
 </resources>
