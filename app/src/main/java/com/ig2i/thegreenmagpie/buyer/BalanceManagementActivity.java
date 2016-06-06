@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ig2i.thegreenmagpie.Loader;
 import com.ig2i.thegreenmagpie.PaypalInfo;
 import com.ig2i.thegreenmagpie.R;
 import com.paypal.android.sdk.payments.PayPalAuthorization;
@@ -38,7 +39,6 @@ public class BalanceManagementActivity extends Activity{
     private Button historyButton;
     private static PayPalConfiguration paypalConfig;
     private static Intent paypalIntent;
-    private ProgressDialog progress;
 
     private void makeAutoAcceptedPayment(String accessToken){
         new MakeAutoAcceptedPayment(new MakeAutoAcceptedPayment.AsyncResponse() {
@@ -50,9 +50,7 @@ public class BalanceManagementActivity extends Activity{
     }
 
     private void makePayment(){
-        progress.setTitle("Loading");
-        progress.setMessage("Wait while loading...");
-        progress.show();
+        Loader.start(this);
         new CheckIfHasTokenAndRefreshIt(new CheckIfHasTokenAndRefreshIt.AsyncResponse() {
             @Override
             public void CheckIfHasTokenIsFinish(String output) {
@@ -109,8 +107,6 @@ public class BalanceManagementActivity extends Activity{
         autoAcceptButton = (Button) findViewById(R.id.button3);
         repaymentButton = (Button) findViewById(R.id.button4);
         historyButton = (Button) findViewById(R.id.button5);
-
-        progress = new ProgressDialog(this);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,10 +210,9 @@ public class BalanceManagementActivity extends Activity{
         new UpdateBalance(new UpdateBalance.AsyncResponse() {
             @Override
             public void UpdateBalanceIsFinished(String output) {
-                Log.d("balance", output);
                 balanceAmountTextView.setText(String.valueOf("$"+output));
                 amountEditText.setText("");
-                progress.dismiss();
+                Loader.end();
             }
         }).execute(email, String.valueOf(amount));
     }

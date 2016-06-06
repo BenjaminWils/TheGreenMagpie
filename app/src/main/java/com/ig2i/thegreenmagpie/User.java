@@ -1,14 +1,18 @@
 package com.ig2i.thegreenmagpie;
 
+import android.util.Log;
+
+import com.ig2i.thegreenmagpie.buyer.GetUserData;
+
 import java.util.ArrayList;
 
 /**
  * Created by 10081923 on 25/05/2016.
  */
 public class User {
-    private String mail;
-    private double balance;
-    private String consent_token;
+    private String email;
+    private float balance;
+    private String token;
 
     private static ArrayList<User> _User = new ArrayList<>();
 
@@ -16,25 +20,45 @@ public class User {
         _User.add(this);
     }
 
-    public User(String mail) {
-        this.mail = mail;
+    public User(String email) {
+        this.email = email;
         _User.add(this);
     }
 
-    public User(String mail, double balance, String consent_token) {
-        this.mail = mail;
+    public User(String email, float balance, String token) {
+        this.email = email;
         this.balance = balance;
-        this.consent_token = consent_token;
+        this.token = token;
         _User.add(this);
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public double getBalance() {
-        // TODO : Sync de la solde avec le serveur
-        return balance;
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public void setData(){
+        new GetUserData(new GetUserData.AsyncResponse() {
+            @Override
+            public void getUserDataIsFinished(String output) {
+                Log.d("userData", output);
+            }
+        }).execute(this.email);
+    }
+
+    public float getBalance(){
+        return this.balance;
+    }
+
+    public void setBalance(float balance){
+        this.balance = balance;
+    }
+
+    public void setToken(String token){
+        this.token = token;
     }
 
     private boolean addBalance(double amount, String paypal_client_id) {
@@ -50,29 +74,17 @@ public class User {
         return result;
     }
 
-    private boolean setAutoAccept(String paypal_client_id) {
-        boolean result = false;
-        // TODO : Placer script auto-acceptation
-        return result;
-    }
-
-    private boolean unsetAutoAccept(String paypal_client_id) {
-        boolean result = false;
-        // TODO : Placer script annulation auto-acceptation
-        return result;
-    }
-
     private boolean sendMoney(double amount) {
         boolean result = false;
         // TODO : placer appel SDK Paypal pour envoi d'argent
         return result;
     }
 
-    public static User getUser(String mail) {
+    public static User getUser(String email) {
         User result = null;
 
         for (User u : _User) {
-            if (u.getMail().equals(mail)) {
+            if (u.getEmail().equals(email)) {
                 result = u;
             }
         }

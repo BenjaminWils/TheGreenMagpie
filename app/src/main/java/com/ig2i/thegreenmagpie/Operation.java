@@ -5,5 +5,5 @@ package com.ig2i.thegreenmagpie;
  */
 public enum Operation {
     REFUND,
-    SPENDING;
+    SPENDING
 }
