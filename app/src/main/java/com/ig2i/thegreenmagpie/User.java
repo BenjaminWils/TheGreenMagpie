@@ -53,6 +53,10 @@ public class User {
         return this.balance;
     }
 
+    public String getToken(){
+        return this.token;
+    }
+
     public void setBalance(float balance){
         this.balance = balance;
     }

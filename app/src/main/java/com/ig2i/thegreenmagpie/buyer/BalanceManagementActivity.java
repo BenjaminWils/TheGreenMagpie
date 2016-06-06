@@ -1,7 +1,6 @@
 package com.ig2i.thegreenmagpie.buyer;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,12 +8,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ig2i.thegreenmagpie.ComplexPreferences;
 import com.ig2i.thegreenmagpie.Loader;
+import com.ig2i.thegreenmagpie.ObjectPreference;
 import com.ig2i.thegreenmagpie.PaypalInfo;
 import com.ig2i.thegreenmagpie.R;
+import com.ig2i.thegreenmagpie.User;
 import com.paypal.android.sdk.payments.PayPalAuthorization;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalFuturePaymentActivity;
@@ -29,8 +32,9 @@ import java.math.BigDecimal;
 
 public class BalanceManagementActivity extends Activity{
 
-    private String email = "buyer001@mail.com";
-    private Button returnButton;
+    private User currentUser;
+    private ObjectPreference objectPreference;
+    private ImageView returnButton;
     private TextView balanceAmountTextView;
     private EditText amountEditText;
     private Button addButton;
@@ -40,29 +44,39 @@ public class BalanceManagementActivity extends Activity{
     private static PayPalConfiguration paypalConfig;
     private static Intent paypalIntent;
 
+    private void showError(){
+        Toast.makeText(this, "Une erreur est survenue", Toast.LENGTH_LONG).show();
+    }
+
     private void makeAutoAcceptedPayment(String accessToken){
         new MakeAutoAcceptedPayment(new MakeAutoAcceptedPayment.AsyncResponse() {
             @Override
             public void AutoAcceptedPaymentIsFinished(String output) {
-                updateBalance((float)20.0);
+                Log.d("paypalAcceptedPayment", output);
+                updateBalance(getPaymentAmount());
+                Loader.end();
             }
         }).execute(accessToken, String.valueOf(getPaymentAmount()), PayPalConfiguration.getClientMetadataId(this));
     }
 
     private void makePayment(){
         Loader.start(this);
-        new CheckIfHasTokenAndRefreshIt(new CheckIfHasTokenAndRefreshIt.AsyncResponse() {
-            @Override
-            public void CheckIfHasTokenIsFinish(String output) {
-                Log.d("output", output);
-                if(("false").equals(output)){
-                    startPaypalActivity(getPaymentAmount());
-                }
-                else{
+        Log.d("userToken", currentUser.getToken());
+        if(currentUser.getToken().length() > 0) {
+            new RefreshToken(new RefreshToken.AsyncResponse() {
+                @Override
+                public void RefreshTokenIsFinish(String output) {
+                    Log.d("refreshTokenOutput", output);
+                    if(("error").equals(output)){
+                        showError();
+                    }
                     makeAutoAcceptedPayment(output);
                 }
-            }
-        }).execute(email);
+            }).execute(currentUser.getEmail(), currentUser.getToken());
+        }
+        else{
+            startPaypalActivity(getPaymentAmount());
+        }
     }
 
     private void startPaypalActivity(float paymentAmount){
@@ -100,7 +114,7 @@ public class BalanceManagementActivity extends Activity{
     }
 
     private void initViewElements(){
-        returnButton = (Button) findViewById(R.id.button);
+        returnButton = (ImageView) findViewById(R.id.returnView);
         balanceAmountTextView = (TextView) findViewById(R.id.textView2);
         amountEditText = (EditText) findViewById(R.id.editText);
         addButton = (Button) findViewById(R.id.button2);
@@ -108,11 +122,13 @@ public class BalanceManagementActivity extends Activity{
         repaymentButton = (Button) findViewById(R.id.button4);
         historyButton = (Button) findViewById(R.id.button5);
 
+        balanceAmountTextView.setText("$"+String.valueOf(currentUser.getBalance()));
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 float paymentAmount = getPaymentAmount();
-                if(amountIsValid(paymentAmount)){
+                if (amountIsValid(paymentAmount)) {
                     makePayment();
                 }
             }
@@ -139,16 +155,32 @@ public class BalanceManagementActivity extends Activity{
     }
 
     private void sendAuthorizationToServer(PayPalAuthorization auth){
-        new FuturePaymentRequest().execute(auth.getAuthorizationCode(), email);
+        new FuturePaymentRequest().execute(auth.getAuthorizationCode(), currentUser.getEmail());
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_balance_management);
+
+        objectPreference = (ObjectPreference) this.getApplication();
+        ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
+
+        currentUser = complexPreferences.getObject("user", User.class);
+
         initViewElements();
         initPaypalElements();
         startService(paypalIntent);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Loader.end();
+        objectPreference = (ObjectPreference) this.getApplication();
+        ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
+        currentUser = complexPreferences.getObject("user", User.class);
+        balanceAmountTextView.setText("$"+String.valueOf(currentUser.getBalance()));
     }
 
     @Override
@@ -206,14 +238,22 @@ public class BalanceManagementActivity extends Activity{
         }
     }
 
-    private void updateBalance(float amount){
+    private void updateBalance(final float amount){
         new UpdateBalance(new UpdateBalance.AsyncResponse() {
             @Override
             public void UpdateBalanceIsFinished(String output) {
                 balanceAmountTextView.setText(String.valueOf("$"+output));
                 amountEditText.setText("");
+                currentUser.setBalance(amount);
+                ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
+                if(complexPreferences != null) {
+                    complexPreferences.putObject("user", currentUser);
+                    complexPreferences.commit();
+                } else {
+                    android.util.Log.e("error preferences", "Preference is null");
+                }
                 Loader.end();
             }
-        }).execute(email, String.valueOf(amount));
+        }).execute(currentUser.getEmail(), String.valueOf(amount));
     }
 }

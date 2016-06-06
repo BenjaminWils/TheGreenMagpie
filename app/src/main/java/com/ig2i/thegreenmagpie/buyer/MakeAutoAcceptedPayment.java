@@ -64,7 +64,6 @@ public class MakeAutoAcceptedPayment extends AsyncTask<String, String, String> {
                         "\"amount\": {\"currency\": \"USD\", \"total\": \""+paymentAmount+"\"}," +
                         "\"description\": \"The Green Magpie\"" +
                     "}]}";
-        Log.d("data", data);
         final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON, data);
@@ -87,6 +86,7 @@ public class MakeAutoAcceptedPayment extends AsyncTask<String, String, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.d("response", requestResponse);
         return requestResponse;
     }
 

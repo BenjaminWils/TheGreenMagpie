@@ -79,4 +79,12 @@ public class BuyerConnectionActivity extends Activity{
             }
         });
     }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        objectPreference = (ObjectPreference) this.getApplication();
+        ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
+        currentUser = complexPreferences.getObject("user", User.class);
+    }
 }

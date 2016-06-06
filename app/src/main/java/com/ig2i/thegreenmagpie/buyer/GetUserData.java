@@ -47,7 +47,6 @@ public class GetUserData extends AsyncTask<String, String, String> {
         try {
             assert response != null;
             requestResponse = response.body().string();
-            Log.d("responseServer", requestResponse);
         } catch (IOException e) {
             e.printStackTrace();
         }

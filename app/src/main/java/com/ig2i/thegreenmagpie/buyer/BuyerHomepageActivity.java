@@ -19,6 +19,7 @@ public class BuyerHomepageActivity extends Activity {
     private Button manageBalanceButton;
     private ImageView logoutButton;
     private ObjectPreference objectPreference;
+    private User currentUser;
 
     private void initViewElements(){
         balanceAmount = (TextView) findViewById(R.id.textView8);
@@ -52,7 +53,16 @@ public class BuyerHomepageActivity extends Activity {
         objectPreference = (ObjectPreference) this.getApplication();
         ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
 
-        User currentUser = complexPreferences.getObject("user", User.class);
+        currentUser = complexPreferences.getObject("user", User.class);
+        balanceAmount.setText("$" + String.valueOf(currentUser.getBalance()));
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        objectPreference = (ObjectPreference) this.getApplication();
+        ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
+        currentUser = complexPreferences.getObject("user", User.class);
         balanceAmount.setText("$"+String.valueOf(currentUser.getBalance()));
     }
 }
