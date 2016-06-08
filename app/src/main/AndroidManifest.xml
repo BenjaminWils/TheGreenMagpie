@@ -12,7 +12,8 @@
         android:name="android.hardware.nfc"
         android:required="true" />
 
-    <application  android:name=".ObjectPreference"
+    <application
+        android:name=".ObjectPreference"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -36,16 +37,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NfcDetectionActivity">
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-
-                <data android:mimeType="application/com.ig2i.thegreenmagpie" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".NfcSenderActivity" />
         <activity
             android:name=".buyer.BuyerConnectionActivity"
             android:label="@string/title_activity_buyer_connection"
@@ -118,7 +109,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HistoryActivity"
+        <activity
+            android:name=".HistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>

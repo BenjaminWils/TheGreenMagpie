@@ -1,5 +1,6 @@
 package com.ig2i.thegreenmagpie;
 
+import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.Tag;
@@ -7,6 +8,10 @@ import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.ig2i.thegreenmagpie.buyer.BuyerHomepageActivity;
+import com.ig2i.thegreenmagpie.seller.SellerWaitingTransactionActivity;
 
 import org.w3c.dom.Text;
 
@@ -17,12 +22,25 @@ import java.util.Arrays;
  * Created by 10081923 on 18/05/2016.
  */
 public class NdefReaderTask extends AsyncTask<Object, Void, String> {
+    private NFCAction action;
+    private Class activityToStart;
+    private BuyerHomepageActivity sourceActivity;
+    private SellerWaitingTransactionActivity sourceActivity2;
 
-    private TextView mTextView;
     @Override
     protected String doInBackground(Object... params) {
         Tag tag = (Tag) params[0];
-        mTextView = (TextView) params[1];
+        this.action = (NFCAction) params[1];
+
+        switch (action) {
+            case StartActivity:
+                this.activityToStart = (Class) params[2];
+                this.sourceActivity = (BuyerHomepageActivity) params[3];
+                break;
+            case ReceptionMsg:
+                this.sourceActivity2 = (SellerWaitingTransactionActivity) params[2];
+                break;
+        }
 
         Ndef ndef = Ndef.get(tag);
         if (ndef == null) {
@@ -38,7 +56,7 @@ public class NdefReaderTask extends AsyncTask<Object, Void, String> {
                 try {
                     return readText(ndefRecord);
                 } catch (UnsupportedEncodingException e) {
-                    Log.e(NfcDetectionActivity.TAG, "Unsupported Encoding", e);
+                    Log.e(sourceActivity.TAG, "Unsupported Encoding", e);
                 }
             }
         }
@@ -65,7 +83,16 @@ public class NdefReaderTask extends AsyncTask<Object, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if (result != null) {
-            mTextView.setText("Read content: " + result);
+            switch (action) {
+                case StartActivity:
+                    Intent intent = new Intent(sourceActivity, activityToStart);
+                    intent.putExtra("nfcMsg", result);
+                    sourceActivity.startActivity(intent);
+                    break;
+                case ReceptionMsg:
+                    sourceActivity2.traitementConfirmation(result);
+                    break;
+            }
         }
     }
 }
