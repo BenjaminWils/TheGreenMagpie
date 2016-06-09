@@ -1,11 +1,11 @@
 package com.ig2i.thegreenmagpie;
 
-import java.util.Date;
+import java.io.Serializable;
 
 /**
  * Created by 10081923 on 25/05/2016.
  */
-public class Transaction {
+public class Transaction implements Serializable {
     private Operation type;
     private double amount;
     private String date;
@@ -18,6 +18,11 @@ public class Transaction {
         this.date = date;
         this.clientEmail = clientEmail;
         this.sellerEmail = sellerEmail;
+    }
+
+    public Transaction(Operation type, double amount) {
+        this.type = type;
+        this.amount = amount;
     }
 
     public Operation getType() {
