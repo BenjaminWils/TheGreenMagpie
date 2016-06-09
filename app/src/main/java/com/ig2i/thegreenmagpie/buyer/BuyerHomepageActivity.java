@@ -70,7 +70,7 @@ public class BuyerHomepageActivity extends Activity {
         if (!mNfcAdapter.isEnabled()) {
             Toast.makeText(this, "NFC is disabled.", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, "@string/explanation", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.explanation, Toast.LENGTH_LONG).show();
         }
 
         initViewElements();
@@ -117,6 +117,21 @@ public class BuyerHomepageActivity extends Activity {
             } else {
                 Log.d(TAG, "Wrong mime type: " + type);
             }
+        }
+    }
+
+    public void startTransaction(String nfcMessage) {
+        Intent intent = new Intent(this, TransactionDetectionActivity.class);
+        intent.putExtra("nfcMsg", nfcMessage);
+        startActivityForResult(intent,1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK){
+            double montant = data.getDoubleExtra("montant", 0.00);
+
+            // TODO : Mettre à jour le solde en local
         }
     }
 

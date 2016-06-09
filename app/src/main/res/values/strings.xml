@@ -23,6 +23,9 @@
     <string name="buyer_balance_amount">Amount:</string>
     <string name="history_right_title">Payments History</string>
     <string name="explanation">NFC is enabled on the device</string>
+    <string name="nfc_enabled">Your NFC is activated</string>
+    <string name="nfc_disabled">Your NFC is deactivated</string>
+    <string name="nfc_unpresent">Your device is not NFC enabled</string>
     <string name="nfcReadOnlyErrorTitle">Read Only Error</string>
     <string name="nfcReadOnlyError">The NFC tag is not writable</string>
     <string name="go_button">GO!</string>

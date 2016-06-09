@@ -19,7 +19,11 @@ import android.support.annotation.BoolRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ig2i.thegreenmagpie.MainActivity;
 import com.ig2i.thegreenmagpie.NFCAction;
@@ -32,13 +36,15 @@ import com.ig2i.thegreenmagpie.buyer.TransactionDetectionActivity;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-public class SellerWaitingTransactionActivity extends Activity {
+public class SellerWaitingTransactionActivity extends Activity implements View.OnClickListener{
     public static final String TAG = "NFCLog";
     public static final String TYPE_MIME = "application/com.ig2i.thegreenmagpie";
 
     private NfcAdapter mNfcAdapter;
     private Transaction transaction;
     private TextView NFCInfoDisplay;
+    private ImageView cancelButton;
+    private TextView cancelText;
 
     public String reponse;
 
@@ -49,11 +55,16 @@ public class SellerWaitingTransactionActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seller_waiting_transaction);
 
+        this.cancelButton = (ImageView) findViewById(R.id.returnView);
+        this.cancelText = (TextView) findViewById(R.id.textView7);
+
+        this.cancelButton.setOnClickListener(this);
+        this.cancelText.setOnClickListener(this);
+
         this.NFCInfoDisplay = (TextView) findViewById(R.id.textView15);
 
-        //this.transaction = (Transaction) getIntent().getSerializableExtra("Transaction");
+        this.transaction = (Transaction) getIntent().getSerializableExtra("Transaction");
 
-        this.transaction = new Transaction(Operation.SPENDING, 1.55);
         this.mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
     }
 
@@ -96,7 +107,7 @@ public class SellerWaitingTransactionActivity extends Activity {
                     Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                     String nfcMessage = intent.getStringExtra("nfcMessage");
                     if (nfcMessage != null) {
-                        this.NFCInfoDisplay.setText("@string/seller_writing_transaction_text");
+                        this.NFCInfoDisplay.setText(R.string.seller_writing_transaction_text);
                         if (writeTag(this.getApplicationContext(), tag, nfcMessage)) {
                             attente = 1;
                         }
@@ -159,7 +170,7 @@ public class SellerWaitingTransactionActivity extends Activity {
                 try {
                     // Write the data to the tag
                     ndef.writeNdefMessage(message);
-                    this.NFCInfoDisplay.setText("@string/seller_transaction_done_text");
+                    this.NFCInfoDisplay.setText(R.string.seller_transaction_done_text);
                     Log.e(TAG,"message écrit");
                     return true;
                 } catch (TagLostException tle) {
@@ -179,7 +190,7 @@ public class SellerWaitingTransactionActivity extends Activity {
                     try {
                         format.connect();
                         format.format(message);
-                        this.NFCInfoDisplay.setText("@string/seller_transaction_done_text");
+                        this.NFCInfoDisplay.setText(R.string.seller_transaction_done_text);
                         Log.e(TAG,"message écrit");
                         return true;
                     } catch (TagLostException tle) {
@@ -239,5 +250,13 @@ public class SellerWaitingTransactionActivity extends Activity {
                 attente = 0;
             }
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("Transaction", transaction);
+        setResult(RESULT_OK,returnIntent);
+        finish();
     }
 }

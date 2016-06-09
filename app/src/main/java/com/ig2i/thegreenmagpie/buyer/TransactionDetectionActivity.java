@@ -20,7 +20,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.ig2i.thegreenmagpie.Operation;
 import com.ig2i.thegreenmagpie.R;
+import com.ig2i.thegreenmagpie.Transaction;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -31,6 +33,7 @@ public class TransactionDetectionActivity extends Activity {
 
     private NfcAdapter mNfcAdapter;
     private String nfcMessage = "";
+    private double montant;
 
     public Button accept;
     public Button decline;
@@ -43,7 +46,7 @@ public class TransactionDetectionActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         String nfcMsg = extras.getString("nfcMsg");
 
-        double montant = Double.parseDouble(nfcMsg.split(";")[2].split(":")[1]);
+        montant = Double.parseDouble(nfcMsg.split(";")[2].split(":")[1]);
 
         this.mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         Toast.makeText(this, nfcMsg, Toast.LENGTH_LONG).show();
@@ -102,8 +105,14 @@ public class TransactionDetectionActivity extends Activity {
                     Log.e(TAG, "detection GreenMagpie NDEF");
                     Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                     if (writeTag(this.getApplicationContext(), tag, nfcMessage)) {
-                        Intent homepageIntent = new Intent(getBaseContext(), BuyerHomepageActivity.class);
-                        startActivity(homepageIntent);
+                        Transaction transac = new Transaction(Operation.SPENDING, montant);
+
+                        // TODO : Effectuer la transaction en base
+
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("montant", montant);
+                        setResult(RESULT_OK,returnIntent);
+                        finish();
                     }
                 } else {
                     Log.d(TAG, "Wrong mime type: " + type);

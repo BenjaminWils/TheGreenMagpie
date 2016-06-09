@@ -85,9 +85,7 @@ public class NdefReaderTask extends AsyncTask<Object, Void, String> {
         if (result != null) {
             switch (action) {
                 case StartActivity:
-                    Intent intent = new Intent(sourceActivity, activityToStart);
-                    intent.putExtra("nfcMsg", result);
-                    sourceActivity.startActivity(intent);
+                    sourceActivity.startTransaction(result);
                     break;
                 case ReceptionMsg:
                     sourceActivity2.traitementConfirmation(result);

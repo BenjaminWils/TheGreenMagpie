@@ -1,11 +1,12 @@
 package com.ig2i.thegreenmagpie;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by 10081923 on 25/05/2016.
  */
-public class Transaction {
+public class Transaction implements Serializable {
     private Operation type;
     private double amount;
     private Date date;
