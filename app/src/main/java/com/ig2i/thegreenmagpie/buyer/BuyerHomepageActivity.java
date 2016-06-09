@@ -51,6 +51,7 @@ public class BuyerHomepageActivity extends Activity {
         complexPreferences.commit();
         Intent intent = new Intent(getBaseContext(), BuyerConnectionActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void initViewElements(){

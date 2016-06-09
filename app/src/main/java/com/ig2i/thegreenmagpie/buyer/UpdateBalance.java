@@ -40,7 +40,7 @@ public class UpdateBalance extends AsyncTask<String, String, String> {
                 .add("amount", paymentAmount)
                 .build();
         Request request = new Request.Builder()
-                .url("http://" + ServerInfo.IpAddress + "/ig2i/android/greenMagpie/updateBalance.php")
+                .url(ServerInfo.UpdateBalanceURL)
                 .post(body)
                 .build();
         Response response = null;
@@ -52,6 +52,7 @@ public class UpdateBalance extends AsyncTask<String, String, String> {
         try {
             assert response != null;
             requestResponse = response.body().string();
+            Log.d("updateBalRep", requestResponse);
         } catch (IOException e) {
             e.printStackTrace();
         }

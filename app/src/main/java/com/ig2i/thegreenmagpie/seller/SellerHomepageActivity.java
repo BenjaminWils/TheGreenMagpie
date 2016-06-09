@@ -17,6 +17,8 @@ import com.ig2i.thegreenmagpie.Transaction;
 public class SellerHomepageActivity extends Activity {
     private Button transactionBtn;
     private Button historyBtn;
+    private TextView settingsText;
+    private ImageView settingsImg;
     private ImageView returnView;
     private TextView returnTxt;
     private Seller seller;
@@ -32,6 +34,8 @@ public class SellerHomepageActivity extends Activity {
         this.returnTxt = (TextView) findViewById(R.id.textView7);
         this.transactionBtn = (Button) findViewById(R.id.button11);
         this.historyBtn = (Button) findViewById(R.id.button12);
+        this.settingsText = (TextView) findViewById(R.id.settingsTextSellerHome);
+        this.settingsImg = (ImageView) findViewById(R.id.settingsImgSellerHome);
 
         this.returnView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +65,24 @@ public class SellerHomepageActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), HistoryActivity.class);
+                intent.putExtra("email", "seller");
                 startActivityForResult(intent, 2);
+            }
+        });
+
+        this.settingsText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        this.settingsImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                startActivity(intent);
             }
         });
     }

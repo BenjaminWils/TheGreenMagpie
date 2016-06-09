@@ -60,7 +60,7 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/editText2"
+                    android:id="@+id/passwordSellerConnection"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginRight="16dp"
                     android:layout_marginLeft="16dp"
@@ -111,7 +111,7 @@
                     android:layout_width="@dimen/go_button_width"
                     android:layout_height="match_parent"
                     android:text="@string/go_button"
-                    android:id="@+id/button6"
+                    android:id="@+id/goBtnSellerConnection"
                     android:layout_gravity="center_horizontal"
                     android:textSize="@dimen/normal_sized_text"
                     android:background="@drawable/edit_text_bg" />
@@ -129,7 +129,7 @@
                 android:layout_width="@dimen/go_button_width"
                 android:layout_height="match_parent"
                 android:text="@string/buyer_button"
-                android:id="@+id/button7"
+                android:id="@+id/clientBtnSellerConnection"
                 android:layout_gravity="end"
                 android:background="@drawable/edit_text_bg"
                 android:textSize="@dimen/normal_sized_text" />

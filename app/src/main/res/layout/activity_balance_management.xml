@@ -73,6 +73,15 @@
                 android:gravity="center_vertical|end">
 
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Balance Management"
+                    android:id="@+id/textView18"
+                    android:textSize="@dimen/normal_sized_text"
+                    android:textColor="@color/light_green"
+                    android:textAlignment="textEnd" />
             </LinearLayout>
         </LinearLayout>
 

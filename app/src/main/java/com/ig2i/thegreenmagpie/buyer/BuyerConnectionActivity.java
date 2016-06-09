@@ -37,7 +37,6 @@ public class BuyerConnectionActivity extends Activity{
             @Override
             public void getUserDataIsFinished(String output) {
                 try {
-                    Log.e("NFCTag", output);
                     JSONObject data = new JSONObject(output);
                     currentUser.setBalance(Float.parseFloat(data.getString("balance")));
                     currentUser.setToken(data.getString("refresh_token"));
