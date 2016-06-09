@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.ig2i.thegreenmagpie.HistoryActivity;
 import com.ig2i.thegreenmagpie.R;
+import com.ig2i.thegreenmagpie.Seller;
 import com.ig2i.thegreenmagpie.Transaction;
 
 public class SellerHomepageActivity extends Activity {
@@ -18,6 +19,7 @@ public class SellerHomepageActivity extends Activity {
     private Button historyBtn;
     private ImageView returnView;
     private TextView returnTxt;
+    private Seller seller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
