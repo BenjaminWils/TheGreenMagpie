@@ -87,7 +87,7 @@ public class BuyerConnectionActivity extends Activity{
         objectPreference = (ObjectPreference) this.getApplication();
         ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
         currentUser = complexPreferences.getObject("user", User.class);
-        if(currentUser.getAutoConnect()){
+        if(currentUser!=null && currentUser.getAutoConnect()){
             Intent intent = new Intent(getBaseContext(), BuyerHomepageActivity.class);
             startActivity(intent);
         }

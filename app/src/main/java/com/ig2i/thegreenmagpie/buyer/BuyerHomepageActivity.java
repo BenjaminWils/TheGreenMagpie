@@ -42,6 +42,7 @@ public class BuyerHomepageActivity extends Activity {
         complexPreferences.commit();
         Intent intent = new Intent(getBaseContext(), BuyerConnectionActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void initViewElements(){
@@ -123,9 +124,12 @@ public class BuyerHomepageActivity extends Activity {
 
     private void handleIntent(Intent intent) {
         String action = intent.getAction();
+        Log.d("detection TAG", action);
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
+            Log.d("intent", intent.toString());
             String type = intent.getType();
+
             if (TYPE_MIME.equals(type)) {
 
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -167,7 +171,7 @@ public class BuyerHomepageActivity extends Activity {
 
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
 
-        adapter.enableForegroundDispatch(activity, pendingIntent, new IntentFilter[] {tagDetected}, techList);
+        adapter.enableForegroundDispatch(activity, pendingIntent, new IntentFilter[]{tagDetected}, techList);
     }
 
     /**

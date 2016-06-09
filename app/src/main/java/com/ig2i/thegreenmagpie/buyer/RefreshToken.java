@@ -36,7 +36,7 @@ public class RefreshToken extends AsyncTask<String, String, String> {
                 .add("refresh_token", params[1])
                 .build();
         Request request = new Request.Builder()
-                .url("http://" + ServerInfo.IpAddress + "/ig2i/android/greenMagpie/refreshToken.php")
+                .url(ServerInfo.RefreshTokenURL)
                 .post(body)
                 .build();
         Response response = null;

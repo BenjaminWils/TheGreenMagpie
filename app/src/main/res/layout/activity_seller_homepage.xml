@@ -80,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_text"
-                    android:id="@+id/textView12"
+                    android:id="@+id/settingsTextSellerHome"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:textColor="@color/light_green"
@@ -97,7 +97,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imageView"
+                    android:id="@+id/settingsImgSellerHome"
                     android:src="@drawable/settings_icon_bg"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp" />

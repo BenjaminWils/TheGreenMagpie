@@ -32,7 +32,7 @@ public class FuturePaymentRequest extends AsyncTask<String, String, String> {
                 .add("email", params[1])
                 .build();
         Request request = new Request.Builder()
-                .url("http://" + ServerInfo.IpAddress + "/ig2i/android/greenMagpie/authorizationFuturePayment.php")
+                .url(ServerInfo.FuturePaymentURL)
                 .post(body)
                 .build();
         Response response = null;

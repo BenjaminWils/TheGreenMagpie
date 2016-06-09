@@ -115,11 +115,6 @@ public class BalanceManagementActivity extends Activity{
                 Float.parseFloat(amountEditText.getText().toString()) : 0;
     }
 
-    private void returnToHome(){
-        Intent intent = new Intent(getBaseContext(), BuyerHomepageActivity.class);
-        startActivity(intent);
-    }
-
     private void initViewElements(){
         returnButton = (ImageView) findViewById(R.id.returnView);
         balanceAmountTextView = (TextView) findViewById(R.id.textView2);
@@ -153,14 +148,14 @@ public class BalanceManagementActivity extends Activity{
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                returnToHome();
+                finish();
             }
         });
 
         returnTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                returnToHome();
+                finish();
             }
         });
 
@@ -168,6 +163,7 @@ public class BalanceManagementActivity extends Activity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getBaseContext(), HistoryActivity.class);
+                intent.putExtra("email", currentUser.getEmail());
                 startActivity(intent);
             }
         });
@@ -208,9 +204,6 @@ public class BalanceManagementActivity extends Activity{
     protected void onResume(){
         super.onResume();
         Loader.end();
-        objectPreference = (ObjectPreference) this.getApplication();
-        ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
-        currentUser = complexPreferences.getObject("user", User.class);
         balanceAmountTextView.setText("$"+String.valueOf(currentUser.getBalance()));
     }
 
@@ -273,9 +266,10 @@ public class BalanceManagementActivity extends Activity{
         new UpdateBalance(new UpdateBalance.AsyncResponse() {
             @Override
             public void UpdateBalanceIsFinished(String output) {
-                balanceAmountTextView.setText(String.valueOf("$"+output));
+                float newBalance = Float.valueOf(output);
+                balanceAmountTextView.setText("$"+String.valueOf(newBalance));
                 amountEditText.setText("");
-                currentUser.setBalance(amount);
+                currentUser.setBalance(newBalance);
                 ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
                 if(complexPreferences != null) {
                     complexPreferences.putObject("user", currentUser);

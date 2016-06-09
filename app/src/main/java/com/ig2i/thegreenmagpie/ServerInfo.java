@@ -4,5 +4,11 @@ package com.ig2i.thegreenmagpie;
  * Created by qlammens on 02/06/16.
  */
 public class ServerInfo {
-    public static final String IpAddress = "192.168.42.241";
+    public static final String ServerURL = "http://thegreenmagpie.freetzi.com";
+    public static final String GetUserDataURL = "http://thegreenmagpie.freetzi.com/getUserData.php";
+    public static final String FuturePaymentURL = "http://thegreenmagpie.freetzi.com/authorizationFuturePayment.php";
+    public static final String RefreshTokenURL = "http://thegreenmagpie.freetzi.com/refreshToken.php";
+    public static final String UpdateBalanceURL = "http://thegreenmagpie.freetzi.com/updateBalance.php";
+    public static final String GetHistoryURL = "http://thegreenmagpie.freetzi.com/getHistory.php";
+    public static final String ConnectSellerURL = "http://thegreenmagpie.freetzi.com/connectSeller.php";
 }
