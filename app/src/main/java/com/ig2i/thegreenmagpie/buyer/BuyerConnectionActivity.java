@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.ig2i.thegreenmagpie.ComplexPreferences;
@@ -26,6 +27,7 @@ public class BuyerConnectionActivity extends Activity{
     private EditText emailEditText;
     private User currentUser;
     private ObjectPreference objectPreference;
+    private CheckBox autoConnectCheckbox;
 
     private void CreateUserInstanceAndConnect(String email){
         currentUser = new User(email);
@@ -38,6 +40,7 @@ public class BuyerConnectionActivity extends Activity{
                     JSONObject data = new JSONObject(output);
                     currentUser.setBalance(Float.parseFloat(data.getString("balance")));
                     currentUser.setToken(data.getString("refresh_token"));
+                    currentUser.setAutoConnect(autoConnectCheckbox.isChecked());
                     ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
                     if(complexPreferences != null) {
                         complexPreferences.putObject("user", currentUser);
@@ -71,6 +74,8 @@ public class BuyerConnectionActivity extends Activity{
             }
         });
 
+        autoConnectCheckbox = (CheckBox) findViewById(R.id.checkBox);
+
         sellerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,6 +83,14 @@ public class BuyerConnectionActivity extends Activity{
                 startActivity(intent);
             }
         });
+
+        objectPreference = (ObjectPreference) this.getApplication();
+        ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
+        currentUser = complexPreferences.getObject("user", User.class);
+        if(currentUser.getAutoConnect()){
+            Intent intent = new Intent(getBaseContext(), BuyerHomepageActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

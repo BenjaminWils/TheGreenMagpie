@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ig2i.thegreenmagpie.ComplexPreferences;
+import com.ig2i.thegreenmagpie.HistoryActivity;
 import com.ig2i.thegreenmagpie.Loader;
 import com.ig2i.thegreenmagpie.ObjectPreference;
 import com.ig2i.thegreenmagpie.PaypalInfo;
@@ -35,6 +36,7 @@ public class BalanceManagementActivity extends Activity{
     private User currentUser;
     private ObjectPreference objectPreference;
     private ImageView returnButton;
+    private TextView returnTextView;
     private TextView balanceAmountTextView;
     private EditText amountEditText;
     private Button addButton;
@@ -113,6 +115,11 @@ public class BalanceManagementActivity extends Activity{
                 Float.parseFloat(amountEditText.getText().toString()) : 0;
     }
 
+    private void returnToHome(){
+        Intent intent = new Intent(getBaseContext(), BuyerHomepageActivity.class);
+        startActivity(intent);
+    }
+
     private void initViewElements(){
         returnButton = (ImageView) findViewById(R.id.returnView);
         balanceAmountTextView = (TextView) findViewById(R.id.textView2);
@@ -121,6 +128,8 @@ public class BalanceManagementActivity extends Activity{
         autoAcceptButton = (Button) findViewById(R.id.button3);
         repaymentButton = (Button) findViewById(R.id.button4);
         historyButton = (Button) findViewById(R.id.button5);
+        returnButton = (ImageView) findViewById(R.id.returnView);
+        returnTextView = (TextView) findViewById(R.id.textView17);
 
         balanceAmountTextView.setText("$"+String.valueOf(currentUser.getBalance()));
 
@@ -138,6 +147,28 @@ public class BalanceManagementActivity extends Activity{
             @Override
             public void onClick(View v) {
                 startPaypalFuturePaymentActivity();
+            }
+        });
+
+        returnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnToHome();
+            }
+        });
+
+        returnTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnToHome();
+            }
+        });
+
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), HistoryActivity.class);
+                startActivity(intent);
             }
         });
     }

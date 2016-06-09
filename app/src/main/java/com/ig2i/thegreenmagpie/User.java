@@ -13,6 +13,7 @@ public class User {
     private String email;
     private float balance;
     private String token;
+    private boolean autoConnect;
 
     private static ArrayList<User> _User = new ArrayList<>();
 
@@ -30,6 +31,14 @@ public class User {
         this.balance = balance;
         this.token = token;
         _User.add(this);
+    }
+
+    public boolean getAutoConnect(){
+        return autoConnect;
+    }
+
+    public void setAutoConnect(boolean autoConnect){
+        this.autoConnect = autoConnect;
     }
 
     public String getEmail() {

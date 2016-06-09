@@ -8,13 +8,55 @@ import java.util.Date;
 public class Transaction {
     private Operation type;
     private double amount;
-    private Date date;
-    private User theUser;
+    private String date;
+    private String clientEmail;
+    private String sellerEmail;
 
-    public Transaction(Operation type, double amount, Date date, User theUser) {
+    public Transaction(Operation type, double amount, String date, String clientEmail, String sellerEmail) {
         this.type = type;
         this.amount = amount;
         this.date = date;
-        this.theUser = theUser;
+        this.clientEmail = clientEmail;
+        this.sellerEmail = sellerEmail;
+    }
+
+    public Operation getType() {
+        return type;
+    }
+
+    public void setType(Operation type) {
+        this.type = type;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getClientEmail() {
+        return clientEmail;
+    }
+
+    public void setClientEmail(String clientEmail) {
+        this.clientEmail = clientEmail;
+    }
+
+    public String getSellerEmail() {
+        return sellerEmail;
+    }
+
+    public void setSellerEmail(String sellerEmail) {
+        this.sellerEmail = sellerEmail;
     }
 }
