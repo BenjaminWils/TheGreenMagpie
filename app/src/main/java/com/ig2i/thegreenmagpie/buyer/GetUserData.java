@@ -35,7 +35,7 @@ public class GetUserData extends AsyncTask<String, String, String> {
                 .add("email", params[0])
                 .build();
         Request request = new Request.Builder()
-                .url("http://" + ServerInfo.IpAddress + "/ig2i/android/greenMagpie/getUserData.php")
+                .url(ServerInfo.GetUserURL)
                 .post(body)
                 .build();
         Response response = null;

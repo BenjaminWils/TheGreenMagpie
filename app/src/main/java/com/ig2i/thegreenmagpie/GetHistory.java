@@ -35,7 +35,7 @@ public class GetHistory extends AsyncTask<String, String, String> {
                 .add("limit", limit)
                 .build();
         Request request = new Request.Builder()
-                .url("http://" + ServerInfo.IpAddress + "/ig2i/android/greenMagpie/getHistory.php")
+                .url(ServerInfo.GetHistoryURL)
                 .post(body)
                 .build();
         Response response = null;

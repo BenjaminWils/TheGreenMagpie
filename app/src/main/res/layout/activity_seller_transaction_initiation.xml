@@ -128,7 +128,7 @@
                     android:ems="10"
                     android:id="@+id/editText3"
                     android:layout_weight="1"
-                    android:background="@drawable/edit_txt_bg_w_borders"
+                    android:background="@drawable/edit_text_bg"
                     android:text="0.80"
                     android:textSize="@dimen/super_sized_text"
                     android:textAlignment="center"
@@ -203,7 +203,7 @@
                     android:layout_height="match_parent"
                     android:text="@string/go_button"
                     android:id="@+id/button13"
-                    android:background="@drawable/edit_txt_bg_w_borders"
+                    android:background="@drawable/edit_text_bg"
                     android:textSize="@dimen/normal_sized_text" />
             </LinearLayout>
 

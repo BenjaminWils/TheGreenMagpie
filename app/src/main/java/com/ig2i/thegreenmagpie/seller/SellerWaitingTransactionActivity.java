@@ -11,10 +11,14 @@ import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcEvent;
 import android.nfc.Tag;
 import android.nfc.TagLostException;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Parcelable;
 import android.support.annotation.BoolRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,17 +35,21 @@ import com.ig2i.thegreenmagpie.NdefReaderTask;
 import com.ig2i.thegreenmagpie.Operation;
 import com.ig2i.thegreenmagpie.R;
 import com.ig2i.thegreenmagpie.Transaction;
+import com.ig2i.thegreenmagpie.buyer.BuyerHomepageActivity;
 import com.ig2i.thegreenmagpie.buyer.TransactionDetectionActivity;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Locale;
 
-public class SellerWaitingTransactionActivity extends Activity implements View.OnClickListener{
+public class SellerWaitingTransactionActivity extends Activity implements View.OnClickListener, NfcAdapter.CreateNdefMessageCallback,NfcAdapter.OnNdefPushCompleteCallback{
     public static final String TAG = "NFCLog";
-    public static final String TYPE_MIME = "application/com.ig2i.thegreenmagpie";
 
     private NfcAdapter mNfcAdapter;
     private Transaction transaction;
+    private ArrayList<Transaction> transactions;
     private TextView NFCInfoDisplay;
     private ImageView cancelButton;
     private TextView cancelText;
@@ -61,158 +69,105 @@ public class SellerWaitingTransactionActivity extends Activity implements View.O
         this.cancelButton.setOnClickListener(this);
         this.cancelText.setOnClickListener(this);
 
+        this.attente = 0;
+
         this.NFCInfoDisplay = (TextView) findViewById(R.id.textView15);
 
         this.transaction = (Transaction) getIntent().getSerializableExtra("Transaction");
+        this.transactions = new ArrayList<>();
 
+        // Défini un message à envoyer par NFC
         this.mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        this.mNfcAdapter.setNdefPushMessageCallback(this, this);
+        this.mNfcAdapter.setOnNdefPushCompleteCallback(this, this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        String nfcMessage = "seller;type:" + this.transaction.getType().toString() + ";montant:" + String.valueOf(this.transaction.getAmount());
-
-        // When an NFC tag comes into range, call the main activity which handles writing the data to the tag
-
-        Intent nfcIntent = new Intent(this.getApplicationContext(), this.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        nfcIntent.putExtra("nfcMessage", nfcMessage);
-        PendingIntent pi = PendingIntent.getActivity(this.getApplicationContext(), 0, nfcIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
-
-        this.mNfcAdapter.enableForegroundDispatch(this, pi, new IntentFilter[] {tagDetected}, null);
-
-        Log.e(TAG, "activation foreground dispatch");
+        setupForegroundDispatch(this, mNfcAdapter);
     }
 
     @Override
     protected void onPause() {
-        this.mNfcAdapter.disableForegroundDispatch(this);
-
+        stopForegroundDispatch(this, mNfcAdapter);
         super.onPause();
     }
 
     @Override
     public void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
         // When an NFC tag is being written, call the write tag function when an intent is
         // received that says the tag is within range of the device and ready to be written to
-        if (attente == 0) {
-            Log.e(TAG, "detection TAG");
-            if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
-                Log.e(TAG, "detection NDEF");
-                String type = intent.getType();
-                if (TYPE_MIME.equals(type)) {
-                    Log.e(TAG, "detection GreenMagpie NDEF");
-                    Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                    String nfcMessage = intent.getStringExtra("nfcMessage");
-                    if (nfcMessage != null) {
-                        this.NFCInfoDisplay.setText(R.string.seller_writing_transaction_text);
-                        if (writeTag(this.getApplicationContext(), tag, nfcMessage)) {
-                            attente = 1;
+        if (attente == 1) {
+            // Réception de la confirmation
+            ArrayList<String> msgs = new ArrayList<>();
+            String action = intent.getAction();
+            if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
+                Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+                NdefMessage[] messages;
+                if (rawMsgs != null) {
+                    messages = new NdefMessage[rawMsgs.length];
+                    for (int i = 0; i < rawMsgs.length; i++) {
+                        messages[i] = (NdefMessage) rawMsgs[i];
+                    }
+
+                    for (NdefMessage msg : messages) {
+                        for (int j = 0; j < msg.getRecords().length; j++) {
+                            NdefRecord record = msg.getRecords()[j];
+                            byte[] id = record.getId();
+                            short tnf = record.getTnf();
+                            byte[] type = record.getType();
+                            try {
+                                msgs.add(getTextData(record.getPayload()));
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
-                } else {
-                    Log.d(TAG, "Wrong mime type: " + type);
-                }
-            }
-        }
-        else if (attente == 1) {
-            // Réception de la confirmation
-            Log.e(TAG, "detection TAG pour confirmation");
-            String action = intent.getAction();
-            if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-                Log.e(TAG, "detection NDEF pour confirmation");
-                String type = intent.getType();
-                if (TYPE_MIME.equals(type)) {
-                    Log.e(TAG, "detection GreenMagpie NDEF pour confirmation");
-                    Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                    new NdefReaderTask().execute(tag, NFCAction.ReceptionMsg, this);
-                } else {
-                    Log.d(TAG, "Wrong mime type: " + type);
+                    String nfcMsg = "";
+                    for (String msg : msgs) {
+                        nfcMsg += msg;
+                    }
+                    traitementConfirmation(nfcMsg);
                 }
             }
         }
     }
 
-    public boolean writeTag(Context context, Tag tag, String data) {
-        // Record to launch Play Store if app is not installed
-        NdefRecord appRecord = NdefRecord.createApplicationRecord(context.getPackageName());
+    /**
+     * @param activity The corresponding {@link BuyerHomepageActivity} requesting the foreground dispatch.
+     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     */
+    public void setupForegroundDispatch(SellerWaitingTransactionActivity activity, NfcAdapter adapter) {
+        final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        // Record with actual data we care about
-        NdefRecord relayRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA,
-                new String(TYPE_MIME)
-                        .getBytes(Charset.forName("US-ASCII")),
-                null, data.getBytes());
+        final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        // Complete NDEF message with both records
-        NdefMessage message = new NdefMessage(new NdefRecord[] {relayRecord, appRecord});
+        IntentFilter[] filters = new IntentFilter[1];
 
-        try {
-            // If the tag is already formatted, just write the message to it
-            Ndef ndef = Ndef.get(tag);
-            if(ndef != null) {
-                ndef.connect();
+        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
 
-                // Make sure the tag is writable
-                if(!ndef.isWritable()) {
-                    Log.e(TAG, "NDEF en lecture");
-                    return false;
-                }
+        adapter.enableForegroundDispatch(activity, pendingIntent, new IntentFilter[] {tagDetected}, null);
+    }
 
-                // Check if there's enough space on the tag for the message
-                int size = message.toByteArray().length;
-                if(ndef.getMaxSize() < size) {
-                    Log.e(TAG, "Tag trop long");
-                    return false;
-                }
+    /**
+     * @param activity The corresponding {@link AppCompatActivity} requesting to stop the foreground dispatch.
+     * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
+     */
+    public void stopForegroundDispatch(SellerWaitingTransactionActivity activity, NfcAdapter adapter) {
+        adapter.disableForegroundDispatch(activity);
+    }
 
-                try {
-                    // Write the data to the tag
-                    ndef.writeNdefMessage(message);
-                    this.NFCInfoDisplay.setText(R.string.seller_transaction_done_text);
-                    Log.e(TAG,"message écrit");
-                    return true;
-                } catch (TagLostException tle) {
-                    Log.e("","");
-                    return false;
-                } catch (IOException ioe) {
-                    Log.e("","");
-                    return false;
-                } catch (FormatException fe) {
-                    Log.e("","");
-                    return false;
-                }
-                // If the tag is not formatted, format it with the message
-            } else {
-                NdefFormatable format = NdefFormatable.get(tag);
-                if(format != null) {
-                    try {
-                        format.connect();
-                        format.format(message);
-                        this.NFCInfoDisplay.setText(R.string.seller_transaction_done_text);
-                        Log.e(TAG,"message écrit");
-                        return true;
-                    } catch (TagLostException tle) {
-                        Log.e("","");
-                        return false;
-                    } catch (IOException ioe) {
-                        Log.e("","");
-                        return false;
-                    } catch (FormatException fe) {
-                        Log.e("","");
-                        return false;
-                    }
-                } else {
-                    Log.e(TAG,"Formatage du NDEF échoué");
-                    return false;
-                }
-            }
-        } catch(Exception e) {
-            Log.e("","");
-        }
-
-        return false;
+    String getTextData(byte[] payload) throws UnsupportedEncodingException {
+        String texteCode = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
+        int langageCodeTaille = payload[0] & 0063;
+        return new String(payload, langageCodeTaille + 1, payload.length - langageCodeTaille - 1, texteCode);
     }
 
     public void traitementConfirmation(String result) {
@@ -226,7 +181,12 @@ public class SellerWaitingTransactionActivity extends Activity implements View.O
                     alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
+                                    transactions.add(transaction);
                                     dialog.dismiss();
+                                    Intent returnIntent = new Intent();
+                                    returnIntent.putExtra("Transactions", transactions);
+                                    setResult(RESULT_OK,returnIntent);
+                                    finish();
                                 }
                             });
                     alertDialog.show();
@@ -239,6 +199,10 @@ public class SellerWaitingTransactionActivity extends Activity implements View.O
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
+                                    Intent returnIntent = new Intent();
+                                    returnIntent.putExtra("Transactions", transactions);
+                                    setResult(RESULT_OK,returnIntent);
+                                    finish();
                                 }
                             });
                     alertDialog.show();
@@ -252,11 +216,54 @@ public class SellerWaitingTransactionActivity extends Activity implements View.O
         }
     }
 
+    NdefRecord creerRecord(String message)
+    {
+        byte[] langBytes = Locale.ENGLISH.getLanguage().getBytes(Charset.forName("US-ASCII"));
+        byte[] textBytes = message.getBytes(Charset.forName("UTF-8"));
+        char status = (char) (langBytes.length);
+        byte[] data = new byte[1 + langBytes.length + textBytes.length];
+        data[0] = (byte) status;
+        System.arraycopy(langBytes, 0, data, 1, langBytes.length);
+        System.arraycopy(textBytes, 0, data, 1 + langBytes.length, textBytes.length);
+        return new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], data);
+    }
+
+    NdefMessage creerMessage(NdefRecord record)
+    {
+        NdefRecord[] records = new NdefRecord[1];
+        records[0] = record;
+        NdefMessage message = new NdefMessage(records);
+        return message;
+    }
+
     @Override
     public void onClick(View v) {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra("Transaction", transaction);
+        returnIntent.putExtra("Transactions", transactions);
         setResult(RESULT_OK,returnIntent);
         finish();
     }
+
+    @Override
+    public void onNdefPushComplete(NfcEvent event) {
+        mHandler.obtainMessage(1).sendToTarget();
+    }
+
+    @Override
+    public NdefMessage createNdefMessage(NfcEvent event) {
+        NdefRecord record = creerRecord("seller;type:" + this.transaction.getType().toString() + ";montant:" + String.valueOf(this.transaction.getAmount()));
+        NdefMessage message = creerMessage(record);
+        return message;
+    }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    attente = 1;
+                    break;
+            }
+        }
+    };
 }

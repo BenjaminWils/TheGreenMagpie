@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.paypal.sdk:paypal-android-sdk:2.14.2'
     compile files('libs/gson-1.7.1.jar')
+    testCompile 'junit:junit:4.12'
 }

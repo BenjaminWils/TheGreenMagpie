@@ -4,8 +4,14 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcEvent;
 import android.nfc.Tag;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +27,9 @@ import com.ig2i.thegreenmagpie.NdefReaderTask;
 import com.ig2i.thegreenmagpie.ObjectPreference;
 import com.ig2i.thegreenmagpie.R;
 import com.ig2i.thegreenmagpie.User;
+
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 public class BuyerHomepageActivity extends Activity {
     public static final String TYPE_MIME = "application/com.ig2i.thegreenmagpie";
@@ -112,7 +121,6 @@ public class BuyerHomepageActivity extends Activity {
     @Override
     protected void onPause() {
         stopForegroundDispatch(this, mNfcAdapter);
-
         super.onPause();
     }
 
@@ -122,19 +130,43 @@ public class BuyerHomepageActivity extends Activity {
     }
 
     private void handleIntent(Intent intent) {
+        ArrayList<String> msgs = new ArrayList<>();
         String action = intent.getAction();
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
+            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            NdefMessage[] messages;
+            if (rawMsgs != null) {
+                messages = new NdefMessage[rawMsgs.length];
+                for (int i = 0; i < rawMsgs.length; i++) {
+                    messages[i] = (NdefMessage) rawMsgs[i];
+                }
 
-            String type = intent.getType();
-            if (TYPE_MIME.equals(type)) {
-
-                Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                new NdefReaderTask().execute(tag, NFCAction.StartActivity, TransactionDetectionActivity.class, this);
-
-            } else {
-                Log.d(TAG, "Wrong mime type: " + type);
+                for (NdefMessage msg : messages) {
+                    for (int j = 0; j < msg.getRecords().length; j++) {
+                        NdefRecord record = msg.getRecords()[j];
+                        byte[] id = record.getId();
+                        short tnf = record.getTnf();
+                        byte[] type = record.getType();
+                        try {
+                            msgs.add(getTextData(record.getPayload()));
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                String nfcMsg = "";
+                for (String msg : msgs) {
+                    nfcMsg += msg;
+                }
+                startTransaction(nfcMsg);
             }
         }
+    }
+
+    String getTextData(byte[] payload) throws UnsupportedEncodingException {
+        String texteCode = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16";
+        int langageCodeTaille = payload[0] & 0063;
+        return new String(payload, langageCodeTaille + 1, payload.length - langageCodeTaille - 1, texteCode);
     }
 
     public void startTransaction(String nfcMessage) {
@@ -156,25 +188,25 @@ public class BuyerHomepageActivity extends Activity {
      * @param activity The corresponding {@link BuyerHomepageActivity} requesting the foreground dispatch.
      * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
      */
-    public static void setupForegroundDispatch(final BuyerHomepageActivity activity, NfcAdapter adapter) {
+    public void setupForegroundDispatch(BuyerHomepageActivity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        final PendingIntent pendingIntent = PendingIntent.getActivity(activity.getApplicationContext(), 0, intent, 0);
+        final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         IntentFilter[] filters = new IntentFilter[1];
-        String[][] techList = new String[][]{};
 
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
 
-        adapter.enableForegroundDispatch(activity, pendingIntent, new IntentFilter[] {tagDetected}, techList);
+        adapter.enableForegroundDispatch(activity, pendingIntent, new IntentFilter[] {tagDetected}, null);
     }
 
     /**
      * @param activity The corresponding {@link AppCompatActivity} requesting to stop the foreground dispatch.
      * @param adapter The {@link NfcAdapter} used for the foreground dispatch.
      */
-    public static void stopForegroundDispatch(final BuyerHomepageActivity activity, NfcAdapter adapter) {
+    public void stopForegroundDispatch(BuyerHomepageActivity activity, NfcAdapter adapter) {
         adapter.disableForegroundDispatch(activity);
     }
 }

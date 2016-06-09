@@ -37,6 +37,7 @@ public class BuyerConnectionActivity extends Activity{
             @Override
             public void getUserDataIsFinished(String output) {
                 try {
+                    Log.e("NFCTag", output);
                     JSONObject data = new JSONObject(output);
                     currentUser.setBalance(Float.parseFloat(data.getString("balance")));
                     currentUser.setToken(data.getString("refresh_token"));
@@ -45,6 +46,8 @@ public class BuyerConnectionActivity extends Activity{
                     if(complexPreferences != null) {
                         complexPreferences.putObject("user", currentUser);
                         complexPreferences.commit();
+                        Intent intent = new Intent(getBaseContext(), BuyerHomepageActivity.class);
+                        startActivity(intent);
                     } else {
                         android.util.Log.e("error preferences", "Preference is null");
                     }
@@ -52,8 +55,6 @@ public class BuyerConnectionActivity extends Activity{
                     e.printStackTrace();
                 }
                 Loader.end();
-                Intent intent = new Intent(getBaseContext(), BuyerHomepageActivity.class);
-                startActivity(intent);
             }
         }).execute(email);
     }
@@ -87,7 +88,7 @@ public class BuyerConnectionActivity extends Activity{
         objectPreference = (ObjectPreference) this.getApplication();
         ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
         currentUser = complexPreferences.getObject("user", User.class);
-        if(currentUser.getAutoConnect()){
+        if(currentUser != null && currentUser.getAutoConnect()){
             Intent intent = new Intent(getBaseContext(), BuyerHomepageActivity.class);
             startActivity(intent);
         }

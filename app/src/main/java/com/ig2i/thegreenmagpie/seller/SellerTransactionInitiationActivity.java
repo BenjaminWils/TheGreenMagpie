@@ -17,6 +17,8 @@ import com.ig2i.thegreenmagpie.Operation;
 import com.ig2i.thegreenmagpie.R;
 import com.ig2i.thegreenmagpie.Transaction;
 
+import java.util.ArrayList;
+
 public class SellerTransactionInitiationActivity extends Activity implements Button.OnClickListener{
     private Button goButton;
     private EditText amountEditTxt;
@@ -78,8 +80,11 @@ public class SellerTransactionInitiationActivity extends Activity implements But
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 1){
-            Transaction transac = (Transaction) data.getSerializableExtra("Transaction");
-            this.amountEditTxt.setText(String.valueOf(transac.getAmount()));
+            ArrayList<Transaction> transactions = (ArrayList<Transaction>) data.getSerializableExtra("Transactions");
+            if (transactions.size() > 0) {
+                Transaction transac = transactions.get(0);
+                this.amountEditTxt.setText(String.valueOf(transac.getAmount()));
+            }
         }
     }
 
