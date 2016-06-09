@@ -1,7 +1,6 @@
 package com.ig2i.thegreenmagpie;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by 10081923 on 25/05/2016.
@@ -9,19 +8,21 @@ import java.util.Date;
 public class Transaction implements Serializable {
     private Operation type;
     private double amount;
-    private Date date;
-    private User theUser;
+    private String date;
+    private String clientEmail;
+    private String sellerEmail;
+
+    public Transaction(Operation type, double amount, String date, String clientEmail, String sellerEmail) {
+        this.type = type;
+        this.amount = amount;
+        this.date = date;
+        this.clientEmail = clientEmail;
+        this.sellerEmail = sellerEmail;
+    }
 
     public Transaction(Operation type, double amount) {
         this.type = type;
         this.amount = amount;
-    }
-
-    public Transaction(Operation type, double amount, Date date, User theUser) {
-        this.type = type;
-        this.amount = amount;
-        this.date = date;
-        this.theUser = theUser;
     }
 
     public Operation getType() {
@@ -40,19 +41,27 @@ public class Transaction implements Serializable {
         this.amount = amount;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public User getTheUser() {
-        return theUser;
+    public String getClientEmail() {
+        return clientEmail;
     }
 
-    public void setTheUser(User theUser) {
-        this.theUser = theUser;
+    public void setClientEmail(String clientEmail) {
+        this.clientEmail = clientEmail;
+    }
+
+    public String getSellerEmail() {
+        return sellerEmail;
+    }
+
+    public void setSellerEmail(String sellerEmail) {
+        this.sellerEmail = sellerEmail;
     }
 }

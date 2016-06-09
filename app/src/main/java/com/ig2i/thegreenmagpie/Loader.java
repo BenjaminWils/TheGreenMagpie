@@ -17,6 +17,6 @@ public class Loader {
     }
 
     public static void end(){
-        progress.dismiss();
+        if(progress != null) progress.dismiss();
     }
 }

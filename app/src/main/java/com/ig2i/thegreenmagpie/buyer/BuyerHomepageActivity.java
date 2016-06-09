@@ -29,15 +29,26 @@ public class BuyerHomepageActivity extends Activity {
     private TextView balanceAmount;
     private Button manageBalanceButton;
     private ImageView logoutButton;
+    private TextView logoutTextView;
     private ObjectPreference objectPreference;
+    private ComplexPreferences complexPreferences;
     private User currentUser;
 
     private NfcAdapter mNfcAdapter;
+
+    private void logout(){
+        currentUser.setAutoConnect(false);
+        complexPreferences.putObject("user", currentUser);
+        complexPreferences.commit();
+        Intent intent = new Intent(getBaseContext(), BuyerConnectionActivity.class);
+        startActivity(intent);
+    }
 
     private void initViewElements(){
         balanceAmount = (TextView) findViewById(R.id.textView8);
         manageBalanceButton = (Button) findViewById(R.id.button8);
         logoutButton = (ImageView) findViewById(R.id.returnView);
+        logoutTextView = (TextView) findViewById(R.id.textView7);
 
         manageBalanceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,8 +61,14 @@ public class BuyerHomepageActivity extends Activity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), BuyerConnectionActivity.class);
-                startActivity(intent);
+                logout();
+            }
+        });
+
+        logoutTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
             }
         });
     }
@@ -76,7 +93,7 @@ public class BuyerHomepageActivity extends Activity {
         initViewElements();
 
         objectPreference = (ObjectPreference) this.getApplication();
-        ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
+        complexPreferences = objectPreference.getComplexPreference();
 
         currentUser = complexPreferences.getObject("user", User.class);
         balanceAmount.setText("$" + String.valueOf(currentUser.getBalance()));
@@ -86,7 +103,7 @@ public class BuyerHomepageActivity extends Activity {
     protected void onResume(){
         super.onResume();
         objectPreference = (ObjectPreference) this.getApplication();
-        ComplexPreferences complexPreferences = objectPreference.getComplexPreference();
+        complexPreferences = objectPreference.getComplexPreference();
         currentUser = complexPreferences.getObject("user", User.class);
         balanceAmount.setText("$"+String.valueOf(currentUser.getBalance()));
         setupForegroundDispatch(this, mNfcAdapter);
