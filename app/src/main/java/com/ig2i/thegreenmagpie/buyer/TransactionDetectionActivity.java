@@ -24,10 +24,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ig2i.thegreenmagpie.ComplexPreferences;
 import com.ig2i.thegreenmagpie.Loader;
+import com.ig2i.thegreenmagpie.ObjectPreference;
 import com.ig2i.thegreenmagpie.Operation;
 import com.ig2i.thegreenmagpie.R;
 import com.ig2i.thegreenmagpie.Transaction;
+import com.ig2i.thegreenmagpie.User;
+import com.ig2i.thegreenmagpie.seller.SaveTransaction;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -41,9 +45,14 @@ public class TransactionDetectionActivity extends Activity implements NfcAdapter
     private TextView amountView;
     private String nfcMessage = "";
     private double montant;
+    private int action;
 
     public Button accept;
     public Button decline;
+
+    private ObjectPreference objectPreference;
+    private ComplexPreferences complexPreferences;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +63,11 @@ public class TransactionDetectionActivity extends Activity implements NfcAdapter
         String nfcMsg = extras.getString("nfcMsg");
 
         montant = Double.parseDouble(nfcMsg.split(";")[2].split(":")[1]);
+
+        objectPreference = (ObjectPreference) this.getApplication();
+        complexPreferences = objectPreference.getComplexPreference();
+
+        currentUser = complexPreferences.getObject("user", User.class);
 
         this.mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         this.amountView = (TextView) findViewById(R.id.textView11);
@@ -66,9 +80,14 @@ public class TransactionDetectionActivity extends Activity implements NfcAdapter
             public void onClick(View v) {
                 accept.setEnabled(false);
                 decline.setEnabled(false);
-                nfcMessage = "buyer;confirmation:true";
-                setNfcPush();
-
+                Loader.start(getBaseContext());
+                try {
+                    saveTransaction(Float.parseFloat(String.valueOf(montant)));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    action = RESULT_CANCELED;
+                }
             }
         });
 
@@ -79,9 +98,15 @@ public class TransactionDetectionActivity extends Activity implements NfcAdapter
                 accept.setEnabled(false);
                 decline.setEnabled(false);
                 nfcMessage = "buyer;confirmation:false";
+                action = RESULT_CANCELED;
                 setNfcPush();
             }
         });
+
+        if (currentUser.getBalance() < montant) {
+            accept.setEnabled(false);
+            Toast.makeText(this, "Cannot be accepted: the transaction amount exceeds your balance", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void setNfcPush() {
@@ -111,6 +136,30 @@ public class TransactionDetectionActivity extends Activity implements NfcAdapter
         return message;
     }
 
+    private void saveTransaction(final float amount){
+        new SaveTransaction(new SaveTransaction.AsyncResponse() {
+            @Override
+            public void SaveTransactionIsFinished(String output) {
+                try {
+                    float newBalance = Float.valueOf(output);
+                    nfcMessage = "buyer;confirmation:true";
+                    action = RESULT_OK;
+                    accept.setEnabled(false);
+                }
+                catch (Exception e) {
+                    nfcMessage = "buyer;confirmation:false";
+                    action = RESULT_CANCELED;
+                }
+
+                setNfcPush();
+                Loader.end();
+                if (action == RESULT_CANCELED) {
+                    Toast.makeText(getBaseContext(), "The transaction encountered an error", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).execute(currentUser.getEmail(), String.valueOf(amount));
+    }
+
     @Override
     public NdefMessage createNdefMessage(NfcEvent event) {
         NdefRecord record = creerRecord(this.nfcMessage);
@@ -130,13 +179,9 @@ public class TransactionDetectionActivity extends Activity implements NfcAdapter
                 case 1:
                     Loader.end();
                     Loader.setMessage("Wait while loading...");
-                    Transaction transac = new Transaction(Operation.SPENDING, montant);
-
-                    // TODO : Effectuer la transaction en base
-
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("montant", montant);
-                    setResult(RESULT_OK,returnIntent);
+                    setResult(action,returnIntent);
                     finish();
                     break;
             }

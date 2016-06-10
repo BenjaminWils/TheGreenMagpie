@@ -129,7 +129,6 @@
                     android:id="@+id/editText3"
                     android:layout_weight="1"
                     android:background="@drawable/edit_text_bg"
-                    android:text="0.80"
                     android:textSize="@dimen/super_sized_text"
                     android:textAlignment="center"
                     android:numeric="decimal" />

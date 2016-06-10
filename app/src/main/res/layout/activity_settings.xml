@@ -6,22 +6,28 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_small_top_margin"
     tools:context="com.ig2i.thegreenmagpie.seller.SettingsActivity"
     android:background="@color/whole_interface_background">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:foreground="@android:color/transparent"
+        android:background="@android:color/transparent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:layout_weight="2"
             android:orientation="horizontal"
-            android:layout_weight="2">
+            android:background="@android:color/transparent"
+            android:baselineAligned="false"
+            android:foreground="@android:color/transparent">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -29,7 +35,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:foreground="@android:color/transparent"
-                android:background="@android:color/transparent" >
+                android:background="@android:color/transparent">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -50,7 +56,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:orientation="vertical"
-                android:gravity="center_vertical" >
+                android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -68,7 +74,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:orientation="vertical"
-                android:gravity="center_vertical|end" >
+                android:gravity="center_vertical|end">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -77,37 +83,46 @@
                     android:id="@+id/textView21"
                     android:textColor="@color/light_green"
                     android:textSize="@dimen/normal_sized_text" />
+
             </LinearLayout>
+
+
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="18"
-            android:paddingTop="20dp">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_height="0dp"
+                android:layout_weight="0.5">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center|center_horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Change admin password"
-                    android:id="@+id/textView20"
-                    android:textColor="@color/dark_green" />
-
+                    android:id="@+id/textView12"
+                    android:textColor="@color/light_green"
+                    android:textSize="@dimen/super_sized_text" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:paddingBottom="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -115,22 +130,46 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Current: "
                     android:id="@+id/textView22"
-                    android:textColor="@color/light_green" />
+                    android:textColor="@color/light_green"
+                    android:textSize="@dimen/normal_sized_text" />
 
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:ems="10"
-                    android:id="@+id/currentPwdSettings"
-                    android:background="@drawable/edit_text_bg" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_height="0dp"
+                android:layout_weight="0.7">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:maxLength="40"
+                    android:maxLines="1"
+                    android:ems="10"
+                    android:id="@+id/currentPwdSettings"
+                    android:background="@drawable/edit_text_bg" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:gravity="bottom"
+                android:paddingBottom="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -138,31 +177,62 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="New: "
                     android:id="@+id/textView24"
-                    android:textColor="@color/light_green" />
+                    android:textColor="@color/light_green"
+                    android:textSize="@dimen/normal_sized_text" />
 
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:ems="10"
-                    android:id="@+id/newPwdSettings"
-                    android:background="@drawable/edit_text_bg" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="17">
+                android:layout_height="0dp"
+                android:layout_weight="0.7"
+                android:gravity="center_horizontal">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="textPassword"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:maxLength="40"
+                    android:maxLines="1"
+                    android:ems="10"
+                    android:id="@+id/newPwdSettings"
+                    android:background="@drawable/edit_text_bg" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.7">
 
                 <Button
                     android:layout_width="fill_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="fill_parent"
                     android:text="Save settings"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/normal_sized_text"
                     android:id="@+id/saveSettingsBtn"
                     android:background="@drawable/edit_text_bg" />
+
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5"
+                android:gravity="center_horizontal">
+
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

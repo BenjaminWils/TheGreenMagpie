@@ -5,8 +5,4 @@ package com.ig2i.thegreenmagpie;
  */
 public class Seller {
     private static String hash_pwd;
-
-    public static void setNfcCommunication(double amount) {
-        // TODO : lancer le montant de la transaction
-    }
 }

@@ -28,8 +28,6 @@ public class SellerHomepageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seller_homepage);
 
-        // TODO : récupérer le seller transmis depuis le SellerConnectionActivity
-
         this.returnView = (ImageView) findViewById(R.id.returnView);
         this.returnTxt = (TextView) findViewById(R.id.textView7);
         this.transactionBtn = (Button) findViewById(R.id.button11);

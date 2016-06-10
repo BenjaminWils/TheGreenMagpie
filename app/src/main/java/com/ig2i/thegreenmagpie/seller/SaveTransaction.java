@@ -32,7 +32,7 @@ public class SaveTransaction extends AsyncTask<String, String, String> {
         String requestResponse = "";
         OkHttpClient client = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
-                .add("amount", params[0])
+                .add("amount", params[1])
                 .add("clientEmail", params[0])
                 .build();
         Request request = new Request.Builder()

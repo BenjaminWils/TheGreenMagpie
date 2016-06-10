@@ -35,7 +35,7 @@ public class UpdateBalance extends AsyncTask<String, String, String> {
         String paymentAmount = params[1];
         Log.d("update", email);
         Log.d("update", paymentAmount);
-        String data = "{\"email\": \""+email+"\", \"amount\":\""+paymentAmount+"\"}";
+        //String data = "{\"email\": \""+email+"\", \"amount\":\""+paymentAmount+"\"}";
         OkHttpClient client = new OkHttpClient();
         RequestBody body = new FormBody.Builder()
                 .add("email", email)

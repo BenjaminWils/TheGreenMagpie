@@ -35,21 +35,22 @@ public class HistoryActivity extends Activity {
 
     private List<Transaction> makeTransactionsList(String serverData){
         List<Transaction> transactionsList = new ArrayList<Transaction>();
-        try{
-            JSONArray jsonArray = new JSONArray(serverData);
-            for (int index = 0; index < jsonArray.length(); index++) {
-                JSONObject row = jsonArray.getJSONObject(index);
-                transactionsList.add(new Transaction(
-                        Operation.valueOf(row.getString("operation")),
-                        row.getDouble("amount"),
-                        row.getString("date"),
-                        row.getString("clientEmail"),
-                        row.getString("sellerEmail")
-                ));
+        if (serverData != null && !serverData.equals("null")) {
+            try {
+                JSONArray jsonArray = new JSONArray(serverData);
+                for (int index = 0; index < jsonArray.length(); index++) {
+                    JSONObject row = jsonArray.getJSONObject(index);
+                    transactionsList.add(new Transaction(
+                            Operation.valueOf(row.getString("operation")),
+                            row.getDouble("amount"),
+                            row.getString("date"),
+                            row.getString("clientEmail"),
+                            row.getString("sellerEmail")
+                    ));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
-        catch(Exception e){
-            e.printStackTrace();
         }
 
         return transactionsList;

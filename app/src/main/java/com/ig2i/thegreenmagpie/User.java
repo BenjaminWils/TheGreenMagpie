@@ -74,22 +74,9 @@ public class User {
         this.token = token;
     }
 
-    private boolean addBalance(double amount, String paypal_client_id) {
-        boolean result = false;
-        // TODO
-
-        return result;
-    }
-
     private boolean askForRefund(String paypal_client_id) {
         boolean result = false;
 
-        return result;
-    }
-
-    private boolean sendMoney(double amount) {
-        boolean result = false;
-        // TODO : placer appel SDK Paypal pour envoi d'argent
         return result;
     }
 

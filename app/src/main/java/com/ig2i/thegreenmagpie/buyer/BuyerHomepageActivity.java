@@ -180,8 +180,11 @@ public class BuyerHomepageActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK){
             double montant = data.getDoubleExtra("montant", 0.00);
-
-            // TODO : Mettre à jour le solde en local
+            currentUser.setBalance(currentUser.getBalance() - Float.parseFloat(String.valueOf(montant)));
+            if(complexPreferences != null) {
+                complexPreferences.putObject("user", currentUser);
+                complexPreferences.commit();
+            }
         }
     }
 

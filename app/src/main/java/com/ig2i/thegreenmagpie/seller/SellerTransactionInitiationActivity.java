@@ -90,12 +90,18 @@ public class SellerTransactionInitiationActivity extends Activity implements But
 
     @Override
     public void onClick(View v) {
-        double montant = Double.parseDouble(amountEditTxt.getText().toString());
-        if (montant != 0) {
-            Intent intent = new Intent(this, SellerWaitingTransactionActivity.class);
-            Transaction transac = new Transaction(Operation.SPENDING, montant);
-            intent.putExtra("Transaction", transac);
-            startActivityForResult(intent, 1);
+        try {
+            double montant = Double.parseDouble(amountEditTxt.getText().toString());
+            if (montant != 0) {
+                Intent intent = new Intent(this, SellerWaitingTransactionActivity.class);
+                Transaction transac = new Transaction(Operation.SPENDING, montant);
+                intent.putExtra("Transaction", transac);
+                startActivityForResult(intent, 1);
+            }
         }
+        catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid amount", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
