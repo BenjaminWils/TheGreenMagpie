@@ -50,6 +50,7 @@ public class GetUserData extends AsyncTask<String, String, String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Log.d("getUserData", requestResponse);
         return requestResponse;
     }
 

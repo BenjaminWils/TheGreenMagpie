@@ -48,7 +48,7 @@ public class SellerConnectionActivity extends Activity {
                             startActivity(intent);
                         }
                         else{
-                            Toast.makeText(SellerConnectionActivity.this, "Connection failed !", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SellerConnectionActivity.this, "Connection failed!", Toast.LENGTH_LONG).show();
                         }
                     }
                 }).execute(passwordEditText.getText().toString());

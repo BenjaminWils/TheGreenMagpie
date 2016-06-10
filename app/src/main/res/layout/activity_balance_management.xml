@@ -252,7 +252,7 @@
                         android:layout_below="@+id/button3"
                         android:layout_alignStart="@id/relativeLayout"
                         android:layout_alignEnd="@id/relativeLayout"
-                        android:background="#B6D7A8"
+                        android:background="#adbaa8"
                         android:layout_alignLeft="@+id/relativeLayout"
                         android:layout_alignRight="@+id/relativeLayout" />
 

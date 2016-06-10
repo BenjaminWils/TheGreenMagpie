@@ -11,4 +11,6 @@ public class ServerInfo {
     public static final String UpdateBalanceURL = "http://thegreenmagpie.freetzi.com/updateBalance.php";
     public static final String GetHistoryURL = "http://thegreenmagpie.freetzi.com/getHistory.php";
     public static final String ConnectSellerURL = "http://thegreenmagpie.freetzi.com/connectSeller.php";
+    public static final String SetSettingsURL = "http://thegreenmagpie.freetzi.com/setSettings.php";
+    public static final String SaveTransactionURL = "http://thegreenmagpie.freetzi.com/saveTransaction.php";
 }

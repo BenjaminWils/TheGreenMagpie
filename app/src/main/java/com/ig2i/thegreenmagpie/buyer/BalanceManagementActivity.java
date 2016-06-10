@@ -167,6 +167,13 @@ public class BalanceManagementActivity extends Activity{
                 startActivity(intent);
             }
         });
+
+        repaymentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getBaseContext(), "Repayment is not implemented yet.\nSorry for your money!", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void initPaypalElements(){
